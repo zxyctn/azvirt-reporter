@@ -47,22 +47,88 @@ export type Bitumen = {
   percentage: number;
 };
 
-export type LimestoneBNS22 = {
-  '0-4': {
-    percentage: number;
-  };
-  '4-8': {
-    percentage: number;
-  };
-  '8-16': {
-    percentage: number;
-  };
-  '16-22': {
-    percentage: number;
-  };
-  '16-32': {
-    percentage: number;
-  };
-};
+export type LimestoneBNS22 = [
+  {
+    thickness: {
+      range: {
+        from: 0;
+        to: 4;
+      };
+      unit: 'mm';
+    };
+    percentage: 40;
+  },
+  {
+    thickness: {
+      range: {
+        from: 4;
+        to: 8;
+      };
+      unit: 'mm';
+    };
+    percentage: 10;
+  },
+  {
+    thickness: {
+      range: {
+        from: 8;
+        to: 16;
+      };
+      unit: 'mm';
+    };
+    percentage: 20;
+  },
+  {
+    thickness: {
+      range: {
+        from: 16;
+        to: 22;
+      };
+      unit: 'mm';
+    };
+    percentage: 30;
+  }
+];
 
-export type LimestoneBNS32 = Omit<LimestoneBNS22, '16-22'>;
+export type LimestoneBNS32 = [
+  {
+    thickness: {
+      range: {
+        from: 0;
+        to: 4;
+      };
+      unit: 'mm';
+    };
+    percentage: 40;
+  },
+  {
+    thickness: {
+      range: {
+        from: 4;
+        to: 8;
+      };
+      unit: 'mm';
+    };
+    percentage: 5;
+  },
+  {
+    thickness: {
+      range: {
+        from: 8;
+        to: 16;
+      };
+      unit: 'mm';
+    };
+    percentage: 30;
+  },
+  {
+    thickness: {
+      range: {
+        from: 16;
+        to: 32;
+      };
+      unit: 'mm';
+    };
+    percentage: 30;
+  }
+];
