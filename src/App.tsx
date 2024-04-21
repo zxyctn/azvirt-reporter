@@ -1,11 +1,23 @@
-import { Button } from '@/components/ui/button';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+
+import Root from './routes/root';
+import Calc from './routes/Calc';
 
 function App() {
-  return (
-    <div className='h-screen w-screen flex justify-center items-center'>
-      <Button>Click me</Button>
-    </div>
-  );
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      element: <Root />,
+      children: [
+        {
+          path: 'calc',
+          element: <Calc />,
+        },
+      ],
+    },
+  ]);
+
+  return <RouterProvider router={router} />;
 }
 
 export default App;
