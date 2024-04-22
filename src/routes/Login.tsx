@@ -1,33 +1,65 @@
-import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import React, { useState } from 'react';
 
-import { themeStore } from '@/lib/stores';
+import { supabaseStore } from '@/lib/stores';
+import { useToast } from '@/components/ui/use-toast';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 
 const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const { toast } = useToast();
+
+  const onEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+
+  const onPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  };
+
+  const submitHandler = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const { data, error } = await supabaseStore.client.auth.signInWithPassword({
+      email: email,
+      password: password,
+    });
+
+    if (error) {
+      console.error(`Error logging in: ${error.message}`);
+      toast({
+        description: `❌ Error logging in: ${error.message}`,
+        variant: 'destructive',
+      });
+    } else {
+      console.log('Logged in successfully');
+      toast({
+        description: '✅ Logged in successfully',
+      });
+    }
+  };
+
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button>
-          Toggle theme
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align='end'>
-        <DropdownMenuItem onClick={() => themeStore.setTheme('light')}>
-          Light
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => themeStore.setTheme('dark')}>
-          Dark
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => themeStore.setTheme('system')}>
-          System
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <form
+      onSubmit={submitHandler}
+      className='grid gap-4 place-content-center h-full'
+    >
+      <div className='grid w-full max-w-sm items-center gap-1.5'>
+        <Label htmlFor='email'>Email</Label>
+        <Input type='email' id='email' onChange={onEmailChange} />
+      </div>
+
+      <div className='grid w-full max-w-sm items-center gap-1.5'>
+        <Label htmlFor='password'>Password</Label>
+        <Input type='password' id='password' onChange={onPasswordChange} />
+      </div>
+
+      <Button type='submit' className='font-bold uppercase'>
+        Login
+      </Button>
+    </form>
   );
 };
 

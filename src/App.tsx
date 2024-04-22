@@ -22,7 +22,11 @@ const App = () => {
     },
   ]);
 
-  return <RouterProvider router={router} />;
+  return (
+    <div className='w-screen h-screen'>
+      <RouterProvider router={router} />
+    </div>
+  );
 };
 
 export default App;
