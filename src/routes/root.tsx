@@ -1,25 +1,23 @@
 import { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { createClient } from '@supabase/supabase-js';
 import type { Session } from '@supabase/supabase-js';
 
-const supabase = createClient(
-  `${process.env.VITE_SUPABASE_URL}`,
-  `${process.env.VITE_SUPABASE_API_KEY}`
-);
+import { supabaseStore } from '@/lib/stores';
+import { Toaster } from '@/components/ui/toaster';
+import ThemeToggler from '@/lib/components/ThemeToggler';
 
 const Root = () => {
   const [session, setSession] = useState<Session | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabaseStore.client.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
     });
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabaseStore.client.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
 
@@ -45,7 +43,12 @@ const Root = () => {
   }, [session]);
 
   return (
-    <div>
+    <div className='w-full h-full'>
+      <Toaster />
+      <div className='absolute top-2 left-2'>
+        <ThemeToggler />
+      </div>
+
       <Outlet />
     </div>
   );
