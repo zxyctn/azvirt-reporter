@@ -7,7 +7,7 @@ import { Toaster } from '@/components/ui/toaster';
 import ThemeToggler from '@/lib/components/ThemeToggler';
 
 const Root = () => {
-  const [session, setSession] = useState<Session | null>(null);
+  const [session, setSession] = useState<Session | null>();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -48,8 +48,9 @@ const Root = () => {
       <div className='absolute top-2 left-2'>
         <ThemeToggler />
       </div>
-
-      <Outlet />
+      <div className='flex justify-center'>
+        <Outlet />
+      </div>
     </div>
   );
 };
