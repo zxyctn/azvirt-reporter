@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import { toast } from 'sonner';
 
 import { supabaseStore } from '@/lib/stores';
-import { useToast } from '@/components/ui/use-toast';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
@@ -9,7 +9,6 @@ import { Button } from '@/components/ui/button';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { toast } = useToast();
 
   const onEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -29,15 +28,10 @@ const Login = () => {
 
     if (error) {
       console.error(`Error logging in: ${error.message}`);
-      toast({
-        description: `❌ Error logging in: ${error.message}`,
-        variant: 'destructive',
-      });
+      toast.error(`Error logging in: ${error.message}`);
     } else {
       console.log('Logged in successfully');
-      toast({
-        description: '✅ Logged in successfully',
-      });
+      toast.success('Logged in successfully');
     }
   };
 

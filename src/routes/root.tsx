@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import type { Session } from '@supabase/supabase-js';
 
-import { supabaseStore } from '@/lib/stores';
-import { Toaster } from '@/components/ui/toaster';
 import ThemeToggler from '@/lib/components/ThemeToggler';
+import { supabaseStore } from '@/lib/stores';
+import { Toaster } from '@/components/ui/sonner';
 
 const Root = () => {
   const [session, setSession] = useState<Session | null>();
@@ -48,7 +48,7 @@ const Root = () => {
       <div className='absolute top-2 left-2'>
         <ThemeToggler />
       </div>
-      <div className='flex justify-center'>
+      <div className='flex justify-center h-full'>
         <Outlet />
       </div>
     </div>
