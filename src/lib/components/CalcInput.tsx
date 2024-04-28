@@ -15,11 +15,19 @@ import { calculation, history } from '@/lib/stores';
 const CalcInput = ({
   readOnly = false,
   onClick,
+  onHistoryClick,
 }: {
   readOnly?: boolean;
   onClick?: () => void;
+  onHistoryClick?: () => void;
 }) => {
-  const [value, setValue] = useState<string>(calculation.value.toString());
+  const [value, setValue] = useState<string>(
+    readOnly
+      ? calculation.value.toString()
+      : calculation.value
+      ? calculation.value.toString()
+      : ''
+  );
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const regex = /^[0-9.]*$/;
@@ -29,19 +37,20 @@ const CalcInput = ({
   };
 
   const calculateHandler = () => {
-    calculation.value = parseFloat(value);
+    calculation.value = parseFloat(value || '0');
     history.addCalculation(calculation);
+    calculation.update();
     onClick && onClick();
   };
 
   return (
-    <>
+    <form onSubmit={(e) => e.preventDefault()} className='grid gap-3 sm:gap-4'>
       <div className='relative'>
         <div className='absolute w-full top-3 flex justify-between h-min px-3'>
           {/* Settings menu */}
           <div className='w-6'>
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
+              <DropdownMenuTrigger asChild className=''>
                 <Button
                   variant='ghost'
                   className='rounded-full p-0 m-0 w-6 h-6'
@@ -53,7 +62,7 @@ const CalcInput = ({
                 <DropdownMenuItem>
                   <span className='text-xs'>Edit defaults</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={onHistoryClick} className=''>
                   <span className='text-xs'>History</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -87,6 +96,7 @@ const CalcInput = ({
         <Input
           value={readOnly ? calculation.value : value}
           onChange={onChange}
+          onClick={readOnly ? onClick : undefined}
           className={`bg-secondary w-full h-full outline-none text-right sm:rounded-lg !pt-20 p-3 sm:!pt-20 sm:p-5 font-bold text-3xl ${
             readOnly ? 'rounded-none' : 'rounded-lg'
           }`}
@@ -99,7 +109,7 @@ const CalcInput = ({
           CALC
         </Button>
       )}
-    </>
+    </form>
   );
 };
 

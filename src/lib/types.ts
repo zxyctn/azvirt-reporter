@@ -12,7 +12,6 @@ export type Defaults = {
 export type Calculation = {
   id: string;
   createdAt: string;
-  updatedAt: string;
   value: number;
   parameters: Defaults;
 };

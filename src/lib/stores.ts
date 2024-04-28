@@ -281,19 +281,17 @@ class Defaults {
 
 class Calculation {
   createdAt: Date;
-  updatedAt: Date;
   parameters: Defaults;
   value: number = 0;
 
   constructor() {
     this.createdAt = new Date();
-    this.updatedAt = new Date();
     this.parameters = new Defaults(defaults);
     makeAutoObservable(this);
   }
 
   update() {
-    this.updatedAt = new Date();
+    this.createdAt = new Date();
   }
 
   totalWeight(layer: 'Base' | 'BNS32' | 'BNS22' | 'SMA') {
@@ -365,7 +363,6 @@ class History {
     this.calculations.push({
       id: uuidv4(),
       createdAt: calculation.createdAt.toISOString(),
-      updatedAt: calculation.updatedAt.toISOString(),
       value: calculation.value,
       parameters: calculation.parameters,
     });
