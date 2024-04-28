@@ -2,20 +2,34 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 
 import { Input } from '@/components/ui/input';
+import { camelCaseToWords } from '@/lib/utils';
+import type { Parameter, ParameterProps } from '@/lib/types';
 
-const Parameter = ({ readOnly = false }: { readOnly?: boolean }) => {
-  const [value, setValue] = useState<string>('');
+const Parameter = ({
+  readOnly = false,
+  name,
+  unit,
+  value,
+  computed,
+  parameters,
+  onChange,
+  disabled,
+}: ParameterProps) => {
+  const [val, setVal] = useState<string>(value ? value.toString() : '');
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const regex = /^[0-9.]*$/;
     if (regex.test(e.target.value)) {
-      setValue(e.target.value);
+      setVal(e.target.value);
+      onChange &&
+        parameters &&
+        onChange(parseFloat(e.target.value), parameters);
     }
   };
 
-  const onClick = (value: string) => {
+  const onClick = (text: string) => {
     navigator.clipboard
-      .writeText(value)
+      .writeText(text)
       .then(() => {
         toast.success('Copied to clipboard');
       })
@@ -27,8 +41,8 @@ const Parameter = ({ readOnly = false }: { readOnly?: boolean }) => {
   return (
     <div className='relative'>
       <Input
-        value={value}
-        onChange={onChange}
+        value={computed ? computed.toFixed(2) : val}
+        onChange={changeHandler}
         className={`w-full h-full outline-none text-center rounded-md !pt-8 p-2.5 text-xl ${
           readOnly
             ? 'bg-primary text-primary-foreground font-bold'
@@ -36,14 +50,15 @@ const Parameter = ({ readOnly = false }: { readOnly?: boolean }) => {
         }`}
         placeholder='0'
         readOnly={readOnly}
-        onClick={() => readOnly && onClick(value)}
+        onClick={() => readOnly && onClick(value?.toString() || '')}
+        disabled={disabled}
       />
       <span
         className={`absolute top-2 w-full flex justify-center text-xs font-semibold ${
           readOnly ? 'text-primary-foreground' : ''
         }`}
       >
-        Test
+        {`${camelCaseToWords(name)}${unit && ` (${unit})`}`}
       </span>
     </div>
   );
