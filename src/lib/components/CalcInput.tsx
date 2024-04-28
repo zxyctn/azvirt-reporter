@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { calculation, history } from '@/lib/stores';
+import { camelCaseToWords } from '../utils';
 
 const CalcInput = ({
   readOnly = false,
@@ -72,13 +73,19 @@ const CalcInput = ({
           <div className='-mt-0.5'>
             <DropdownMenu>
               <DropdownMenuTrigger>
-                <Badge className='cursor-pointer'>Length</Badge>
+                <Badge className='cursor-pointer'>
+                  {camelCaseToWords(calculation.parameters.type)}
+                </Badge>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => calculation.parameters.setType('length')}
+                >
                   <span className='text-xs'>Length</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => calculation.parameters.setType('weight')}
+                >
                   <span className='text-xs'>Weight</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -90,7 +97,7 @@ const CalcInput = ({
         </div>
         {/* Input unit */}
         <span className='absolute sm:bottom-14 right-4 sm:right-5 bottom-12 font-medium'>
-          Meters
+          {calculation.parameters.unit === 'm' ? 'Meters' : 'Tons'}
         </span>
         {/* Input */}
         <Input

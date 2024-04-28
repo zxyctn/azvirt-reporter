@@ -294,7 +294,18 @@ class Calculation {
     this.createdAt = new Date();
   }
 
+  totalLength(layer: 'Base' | 'BNS32' | 'BNS22' | 'SMA') {
+    if (this.parameters.type === 'length') return this.value;
+    return (
+      this.value /
+      (this.parameters[layer].general.width.value *
+        this.parameters[layer].general.bulkDensity.value *
+        this.parameters[layer].general.thickness.value)
+    );
+  }
+
   totalWeight(layer: 'Base' | 'BNS32' | 'BNS22' | 'SMA') {
+    if (this.parameters.type === 'weight') return this.value;
     return (
       this.parameters[layer].general.width.value *
       this.parameters[layer].general.bulkDensity.value *
@@ -315,8 +326,42 @@ class Calculation {
     });
   }
 
+  get totalBaseLength() {
+    return this.totalLength('Base');
+  }
+
+  get totalBNS32Length() {
+    return this.totalLength('BNS32');
+  }
+
+  get totalBNS22Length() {
+    return this.totalLength('BNS22');
+  }
+
+  get totalSMALength() {
+    return this.totalLength('SMA');
+  }
+
   get totalBaseWeight() {
     return this.totalWeight('Base');
+  }
+
+  get totalLayerWeights() {
+    return {
+      Base: this.totalBaseWeight,
+      BNS32: this.totalBNS32Weight,
+      BNS22: this.totalBNS22Weight,
+      SMA: this.totalSMAWeight,
+    };
+  }
+
+  get totalLayerLengths() {
+    return {
+      Base: this.totalBaseLength,
+      BNS32: this.totalBNS32Length,
+      BNS22: this.totalBNS22Length,
+      SMA: this.totalSMALength,
+    };
   }
 
   get totalBNS32Weight() {

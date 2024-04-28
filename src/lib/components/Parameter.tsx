@@ -50,7 +50,7 @@ const Parameter = ({
         }`}
         placeholder='0'
         readOnly={readOnly}
-        onClick={() => readOnly && onClick(value?.toString() || '')}
+        onClick={() => readOnly && computed && onClick(computed.toFixed(2))}
         disabled={disabled}
       />
       <span

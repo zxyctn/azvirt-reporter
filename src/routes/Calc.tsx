@@ -105,13 +105,9 @@ const Calc = observer(() => {
                 <Parameter
                   key={`${tab}-general-total`}
                   computed={
-                    tab === 'Base'
-                      ? calculation.totalBaseWeight
-                      : tab === 'BNS32'
-                      ? calculation.totalBNS32Weight
-                      : tab === 'BNS22'
-                      ? calculation.totalBNS22Weight
-                      : calculation.totalSMAWeight
+                    calculation.parameters.type === 'length'
+                      ? calculation.totalLayerWeights[tab]
+                      : calculation.totalLayerLengths[tab]
                   }
                   name={
                     calculation.parameters.type === 'length'
@@ -150,12 +146,8 @@ const Calc = observer(() => {
                         ? calculation.totalBNS22BitumenWeight
                         : calculation.totalSMABitumenWeight
                     }
-                    name={
-                      calculation.parameters.type === 'length'
-                        ? 'weight'
-                        : 'length'
-                    }
-                    unit={calculation.parameters.unit === 'm' ? 't' : 'm'}
+                    name='weight'
+                    unit='t'
                     readOnly
                   />
                 </div>
@@ -205,14 +197,8 @@ const Calc = observer(() => {
                                 ? calculation.totalBNS32LimestoneWeight[index]
                                 : calculation.totalBNS22LimestoneWeight[index]
                             }
-                            name={
-                              calculation.parameters.type === 'length'
-                                ? 'weight'
-                                : 'length'
-                            }
-                            unit={
-                              calculation.parameters.unit === 'm' ? 't' : 'm'
-                            }
+                            name='weight'
+                            unit='t'
                             readOnly
                           />
                         </div>
