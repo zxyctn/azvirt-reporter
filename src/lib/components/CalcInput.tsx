@@ -12,6 +12,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { calculation, history } from '@/lib/stores';
 import { camelCaseToWords } from '../utils';
+import { toast } from 'sonner';
 
 const CalcInput = ({
   readOnly = false,
@@ -42,6 +43,15 @@ const CalcInput = ({
     history.addCalculation(calculation);
     calculation.update();
     onClick && onClick();
+  };
+
+  const changeType = (type: 'length' | 'weight') => {
+    calculation.parameters.setType(type);
+    toast(
+      <span>
+        Type changed to <span className='font-bold'>{type}</span>
+      </span>
+    );
   };
 
   return (
@@ -78,14 +88,10 @@ const CalcInput = ({
                 </Badge>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem
-                  onClick={() => calculation.parameters.setType('length')}
-                >
+                <DropdownMenuItem onClick={() => changeType('length')}>
                   <span className='text-xs'>Length</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => calculation.parameters.setType('weight')}
-                >
+                <DropdownMenuItem onClick={() => changeType('weight')}>
                   <span className='text-xs'>Weight</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
