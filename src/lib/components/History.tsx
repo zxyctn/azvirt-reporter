@@ -13,7 +13,7 @@ const History = ({ onClose }: { onClose: () => void }) => {
         <Cross1Icon className='w-3 h-3 cursor-pointer' onClick={onClose} />
       </div>
       <div className='p-3 sm:p-5 pt-0 sm:pt-0  overflow-auto max-h-[500px]'>
-        {history.calculations.map((calculation, index) => (
+        {[...history.calculations].reverse().map((calculation, index) => (
           <div
             className={`flex justify-between items-center ${
               index < history.calculations.length - 1
