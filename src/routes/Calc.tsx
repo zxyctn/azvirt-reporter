@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import CalcInput from '@/lib/components/CalcInput';
 import Parameter from '@/lib/components/Parameter';
 import History from '@/lib/components/History';
+import EditDefaults from '@/lib/components/EditDefaults';
 import {
   Accordion,
   AccordionContent,
@@ -17,6 +18,7 @@ import { calculation } from '@/lib/stores';
 const Calc = observer(() => {
   const [inputOpen, setInputOpen] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [editDefaultsOpen, setEditDefaultsOpen] = useState(false);
   const [tab, setTab] = useState<'BNS32' | 'BNS22' | 'SMA' | 'Base'>('Base');
 
   const parameterChangeHandler = (value: number, parameters: any[]) => {
@@ -41,7 +43,8 @@ const Calc = observer(() => {
       <div>
         <CalcInput
           onClick={() => setInputOpen(true)}
-          onHistoryClick={() => setHistoryOpen(!historyOpen)}
+          onHistoryClick={() => setHistoryOpen(true)}
+          onEditDefaultsClick={() => setEditDefaultsOpen(true)}
           readOnly
         />
       </div>
@@ -49,7 +52,8 @@ const Calc = observer(() => {
         <DialogContent className='p-3 border-0 bg-transparent'>
           <CalcInput
             onClick={() => setInputOpen(!inputOpen)}
-            onHistoryClick={() => setHistoryOpen(!historyOpen)}
+            onHistoryClick={() => setHistoryOpen(true)}
+            onEditDefaultsClick={() => setEditDefaultsOpen(true)}
           />
         </DialogContent>
       </Dialog>
@@ -57,6 +61,12 @@ const Calc = observer(() => {
       <Dialog open={historyOpen} onOpenChange={setHistoryOpen}>
         <DialogContent className='p-3 border-0 bg-transparent'>
           <History onClose={() => setHistoryOpen(false)} />
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={editDefaultsOpen} onOpenChange={setEditDefaultsOpen}>
+        <DialogContent className='p-3 border-0 bg-transparent'>
+          <EditDefaults onClose={() => setEditDefaultsOpen(false)} />
         </DialogContent>
       </Dialog>
 
@@ -157,7 +167,7 @@ const Calc = observer(() => {
           {'limestone' in calculation.parameters[tab] && (
             <AccordionItem value='limestone'>
               <AccordionTrigger>Limestone</AccordionTrigger>
-              <AccordionContent className='grid gap-3 md:gap-4 lg:gap-5'>
+              <AccordionContent className='grid gap-8 md:gap-4 lg:gap-5'>
                 {
                   // @ts-ignore
                   calculation.parameters[tab].limestone.map(

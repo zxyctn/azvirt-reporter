@@ -18,10 +18,12 @@ const CalcInput = ({
   readOnly = false,
   onClick,
   onHistoryClick,
+  onEditDefaultsClick,
 }: {
   readOnly?: boolean;
   onClick?: () => void;
   onHistoryClick?: () => void;
+  onEditDefaultsClick?: () => void;
 }) => {
   const [value, setValue] = useState<string>(
     readOnly
@@ -70,7 +72,7 @@ const CalcInput = ({
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className='right:0 absolute left-auto top-full w-auto'>
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={onEditDefaultsClick}>
                   <span className='text-xs'>Edit defaults</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={onHistoryClick} className=''>
