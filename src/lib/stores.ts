@@ -286,7 +286,7 @@ class Calculation {
 
   constructor() {
     this.createdAt = new Date();
-    this.parameters = new Defaults(defaults);
+    this.parameters = new Defaults();
     makeAutoObservable(this);
   }
 
