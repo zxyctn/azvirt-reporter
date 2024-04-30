@@ -43,7 +43,7 @@ const CalcInput = ({
   const calculateHandler = () => {
     calculation.value = parseFloat(value || '0');
     history.addCalculation(calculation);
-    calculation.update();
+    calculation.updateCalculation();
     onClick && onClick();
   };
 

@@ -229,14 +229,72 @@ class Defaults {
     },
   };
 
-  constructor(defaults: Defaults | null = null) {
-    if (defaults) {
-      this.type = defaults.type;
-      this.unit = defaults.unit;
-      this.Base = defaults.Base;
-      this.BNS32 = defaults.BNS32;
-      this.BNS22 = defaults.BNS22;
-      this.SMA = defaults.SMA;
+  constructor(parameters: Defaults | null = null) {
+    if (parameters) {
+      this.type = parameters.type;
+      this.unit = parameters.unit;
+
+      this.Base.general.thickness.value =
+        parameters.Base.general.thickness.value;
+      this.Base.general.thickness.unit = parameters.Base.general.thickness.unit;
+      this.Base.general.width.value = parameters.Base.general.width.value;
+      this.Base.general.width.unit = parameters.Base.general.width.unit;
+      this.Base.general.bulkDensity.value =
+        parameters.Base.general.bulkDensity.value;
+      this.Base.general.bulkDensity.unit =
+        parameters.Base.general.bulkDensity.unit;
+
+      this.BNS32.general.thickness.value =
+        parameters.BNS32.general.thickness.value;
+      this.BNS32.general.thickness.unit =
+        parameters.BNS32.general.thickness.unit;
+      this.BNS32.general.width.value = parameters.BNS32.general.width.value;
+      this.BNS32.general.width.unit = parameters.BNS32.general.width.unit;
+      this.BNS32.general.bulkDensity.value =
+        parameters.BNS32.general.bulkDensity.value;
+      this.BNS32.general.bulkDensity.unit =
+        parameters.BNS32.general.bulkDensity.unit;
+      this.BNS32.bitumen.fraction.value =
+        parameters.BNS32.bitumen.fraction.value;
+      this.BNS32.limestone[0].percentage.value =
+        parameters.BNS32.limestone[0].percentage.value;
+      this.BNS32.limestone[1].percentage.value =
+        parameters.BNS32.limestone[1].percentage.value;
+      this.BNS32.limestone[2].percentage.value =
+        parameters.BNS32.limestone[2].percentage.value;
+      this.BNS32.limestone[3].percentage.value =
+        parameters.BNS32.limestone[3].percentage.value;
+
+      this.BNS22.general.thickness.value =
+        parameters.BNS22.general.thickness.value;
+      this.BNS22.general.thickness.unit =
+        parameters.BNS22.general.thickness.unit;
+      this.BNS22.general.width.value = parameters.BNS22.general.width.value;
+      this.BNS22.general.width.unit = parameters.BNS22.general.width.unit;
+      this.BNS22.general.bulkDensity.value =
+        parameters.BNS22.general.bulkDensity.value;
+      this.BNS22.general.bulkDensity.unit =
+        parameters.BNS22.general.bulkDensity.unit;
+      this.BNS22.bitumen.fraction.value =
+        parameters.BNS22.bitumen.fraction.value;
+      this.BNS22.limestone[0].percentage.value =
+        parameters.BNS22.limestone[0].percentage.value;
+      this.BNS22.limestone[1].percentage.value =
+        parameters.BNS22.limestone[1].percentage.value;
+      this.BNS22.limestone[2].percentage.value =
+        parameters.BNS22.limestone[2].percentage.value;
+      this.BNS22.limestone[3].percentage.value =
+        parameters.BNS22.limestone[3].percentage.value;
+
+      this.SMA.general.thickness.value = parameters.SMA.general.thickness.value;
+      this.SMA.general.thickness.unit = parameters.SMA.general.thickness.unit;
+      this.SMA.general.width.value = parameters.SMA.general.width.value;
+      this.SMA.general.width.unit = parameters.SMA.general.width.unit;
+      this.SMA.general.bulkDensity.value =
+        parameters.SMA.general.bulkDensity.value;
+      this.SMA.general.bulkDensity.unit =
+        parameters.SMA.general.bulkDensity.unit;
+      this.SMA.bitumen.fraction.value = parameters.SMA.bitumen.fraction.value;
     }
     makeAutoObservable(this);
   }
@@ -292,6 +350,11 @@ class Calculation {
 
   update() {
     this.createdAt = new Date();
+  }
+
+  updateCalculation() {
+    this.createdAt = new Date();
+    this.parameters = new Defaults(defaults);
   }
 
   totalLength(layer: 'Base' | 'BNS32' | 'BNS22' | 'SMA') {
