@@ -34,7 +34,7 @@ const History = ({ onClose }: { onClose: () => void }) => {
           </div>
         ))}
         {!history.calculations.length && (
-          <div className='text-center text-sm italic text-secondary-foreground/50'>
+          <div className='text-center text-sm italic text-card-foreground/50'>
             No calculations yet
           </div>
         )}
