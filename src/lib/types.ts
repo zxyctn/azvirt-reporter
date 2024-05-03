@@ -9,12 +9,16 @@ export type Defaults = {
   unit: 'm' | 't';
 };
 
-export type Calculation = {
+export interface Calculation {
   id: string;
   createdAt: string;
   value: number;
   parameters: Defaults;
-};
+}
+
+export interface CalculationServer extends Omit<Calculation, 'createdAt'> {
+  created_at: string;
+}
 
 export type Base = {
   general: General;

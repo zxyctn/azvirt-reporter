@@ -25,7 +25,6 @@ const Calc = observer(() => {
     if (parameters.length < 3) return;
     const [layer, group, parameter] = parameters;
     calculation.parameters.setParameter(layer, group, parameter, value);
-    calculation.update();
   };
 
   const limestonePercentageChangeHandler = (
@@ -35,7 +34,6 @@ const Calc = observer(() => {
     if (parameters.length < 2) return;
     const [layer, index] = parameters;
     calculation.parameters.setLimestonePercentage(layer, index, value);
-    calculation.update();
   };
 
   return (
@@ -100,7 +98,7 @@ const Calc = observer(() => {
                       | 'bulkDensity';
                     return (
                       <Parameter
-                        key={`${tab}-general-${parameter}`}
+                        key={`${+calculation.createdAt}-${+calculation.createdAt}-${tab}-general-${parameter}`}
                         layer={tab}
                         group='general'
                         name={p}
@@ -113,7 +111,7 @@ const Calc = observer(() => {
                   }
                 )}
                 <Parameter
-                  key={`${tab}-general-total`}
+                  key={`${+calculation.createdAt}-${tab}-general-total`}
                   computed={
                     calculation.parameters.type === 'length'
                       ? calculation.totalLayerWeights[tab]
@@ -136,7 +134,7 @@ const Calc = observer(() => {
               <AccordionContent>
                 <div className='grid grid-cols-2 gap-3 md:gap-4 lg:gap-5'>
                   <Parameter
-                    key={`${tab}-bitumen-fraction`}
+                    key={`${+calculation.createdAt}-${tab}-bitumen-fraction`}
                     layer={tab}
                     group='bitumen'
                     name='fraction'
@@ -148,7 +146,7 @@ const Calc = observer(() => {
                     onChange={parameterChangeHandler}
                   />
                   <Parameter
-                    key={`${tab}-bitumen-total`}
+                    key={`${+calculation.createdAt}-${tab}-bitumen-total`}
                     computed={
                       tab === 'BNS32'
                         ? calculation.totalBNS32BitumenWeight
@@ -175,17 +173,17 @@ const Calc = observer(() => {
                     (item, index) => (
                       <div
                         className='grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-4 lg:gap-5'
-                        key={`${tab}-limestone-${index}-div`}
+                        key={`${+calculation.createdAt}-${tab}-limestone-${index}-div`}
                       >
                         <Parameter
-                          key={`${tab}-limestone-${index}-thickness`}
+                          key={`${+calculation.createdAt}-${tab}-limestone-${index}-thickness`}
                           name='thickness'
                           value={item.thickness.value}
                           unit={item.thickness.unit}
                           disabled
                         />
                         <Parameter
-                          key={`${tab}-limestone-${index}-percentage`}
+                          key={`${+calculation.createdAt}-${tab}-limestone-${index}-percentage`}
                           layer={tab}
                           group='limestone'
                           name='percentage'
@@ -196,7 +194,7 @@ const Calc = observer(() => {
                         />
                         <div className='col-span-2 sm:col-span-1'>
                           <Parameter
-                            key={`${tab}-limestone-${index}-total`}
+                            key={`${+calculation.createdAt}-${tab}-limestone-${index}-total`}
                             computed={
                               tab === 'BNS32'
                                 ? calculation.totalBNS32LimestoneWeight[index]

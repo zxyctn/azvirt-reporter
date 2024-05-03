@@ -1,7 +1,13 @@
 import { v4 as uuidv4 } from 'uuid';
 import { makeAutoObservable } from 'mobx';
-import { SupabaseClient, createClient } from '@supabase/supabase-js';
+import { SupabaseClient, User, createClient } from '@supabase/supabase-js';
 
+import {
+  calculationServerConverter,
+  deepCopy,
+  defaultsClientConverter,
+  defaultsServerConverter,
+} from '@/lib/utils';
 import type {
   BNS22,
   BNS32,
@@ -9,6 +15,8 @@ import type {
   SMA,
   Theme,
   Calculation as CalculationType,
+  Defaults as DefaultsType,
+  CalculationServer,
 } from '@/lib/types';
 
 class ThemeStore {
@@ -44,10 +52,96 @@ class ThemeStore {
 
 class SupabaseStore {
   client: SupabaseClient;
+  user: User | null = null;
 
   constructor(client: SupabaseClient) {
-    makeAutoObservable(this);
     this.client = client;
+    makeAutoObservable(this);
+  }
+
+  updateDefaults(defaults: Defaults) {
+    if (!this.user) {
+      throw new Error('Not authenticated');
+    }
+
+    return this.client
+      .from('defaults')
+      .upsert(defaultsServerConverter(this.user.id, defaults), {
+        onConflict: 'user_id',
+      });
+  }
+
+  async fetchDefaults() {
+    if (!this.user) {
+      throw new Error('Not authenticated');
+    }
+
+    const { data, error } = await this.client
+      .from('defaults')
+      .select()
+      .eq('user_id', this.user.id);
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    if (data.length === 0) return;
+
+    const converted = defaultsClientConverter(data[0]);
+    editDefaults.update(converted);
+    defaults.update(converted);
+    defaults.updateLocalStorage();
+  }
+
+  async fetchHistory() {
+    if (!this.user) {
+      throw new Error('Not authenticated');
+    }
+
+    const { data, error } = await this.client
+      .from('calculations')
+      .select()
+      .eq('user_id', this.user.id);
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    if (data.length === 0) return;
+
+    data.forEach((calc: CalculationServer) => {
+      const defaultParameters = new Defaults();
+      defaultParameters.update(defaultsClientConverter(calc));
+
+      const calculation = new Calculation();
+      calculation.value = calc.value;
+      calculation.createdAt = new Date(calc.created_at);
+      calculation.parameters = defaultParameters;
+
+      history.addCalculation(calculation);
+    });
+  }
+
+  async addCalculation(calculation: Calculation) {
+    if (!this.user) return;
+
+    this.client
+      .from('calculations')
+      .insert([
+        {
+          user_id: this.user.id,
+          value: calculation.value,
+          created_at: calculation.createdAt.toISOString(),
+          ...calculationServerConverter(this.user.id, calculation),
+        },
+      ])
+      .then((response) => {
+        if (response.error) {
+          console.error(response.error);
+        }
+      });
   }
 }
 
@@ -229,74 +323,29 @@ class Defaults {
     },
   };
 
-  constructor(parameters: Defaults | null = null) {
-    if (parameters) {
-      this.type = parameters.type;
-      this.unit = parameters.unit;
+  constructor() {
+    // check local storage for defaults
+    const localDefaults = window.localStorage.getItem('defaults');
 
-      this.Base.general.thickness.value =
-        parameters.Base.general.thickness.value;
-      this.Base.general.thickness.unit = parameters.Base.general.thickness.unit;
-      this.Base.general.width.value = parameters.Base.general.width.value;
-      this.Base.general.width.unit = parameters.Base.general.width.unit;
-      this.Base.general.bulkDensity.value =
-        parameters.Base.general.bulkDensity.value;
-      this.Base.general.bulkDensity.unit =
-        parameters.Base.general.bulkDensity.unit;
-
-      this.BNS32.general.thickness.value =
-        parameters.BNS32.general.thickness.value;
-      this.BNS32.general.thickness.unit =
-        parameters.BNS32.general.thickness.unit;
-      this.BNS32.general.width.value = parameters.BNS32.general.width.value;
-      this.BNS32.general.width.unit = parameters.BNS32.general.width.unit;
-      this.BNS32.general.bulkDensity.value =
-        parameters.BNS32.general.bulkDensity.value;
-      this.BNS32.general.bulkDensity.unit =
-        parameters.BNS32.general.bulkDensity.unit;
-      this.BNS32.bitumen.fraction.value =
-        parameters.BNS32.bitumen.fraction.value;
-      this.BNS32.limestone[0].percentage.value =
-        parameters.BNS32.limestone[0].percentage.value;
-      this.BNS32.limestone[1].percentage.value =
-        parameters.BNS32.limestone[1].percentage.value;
-      this.BNS32.limestone[2].percentage.value =
-        parameters.BNS32.limestone[2].percentage.value;
-      this.BNS32.limestone[3].percentage.value =
-        parameters.BNS32.limestone[3].percentage.value;
-
-      this.BNS22.general.thickness.value =
-        parameters.BNS22.general.thickness.value;
-      this.BNS22.general.thickness.unit =
-        parameters.BNS22.general.thickness.unit;
-      this.BNS22.general.width.value = parameters.BNS22.general.width.value;
-      this.BNS22.general.width.unit = parameters.BNS22.general.width.unit;
-      this.BNS22.general.bulkDensity.value =
-        parameters.BNS22.general.bulkDensity.value;
-      this.BNS22.general.bulkDensity.unit =
-        parameters.BNS22.general.bulkDensity.unit;
-      this.BNS22.bitumen.fraction.value =
-        parameters.BNS22.bitumen.fraction.value;
-      this.BNS22.limestone[0].percentage.value =
-        parameters.BNS22.limestone[0].percentage.value;
-      this.BNS22.limestone[1].percentage.value =
-        parameters.BNS22.limestone[1].percentage.value;
-      this.BNS22.limestone[2].percentage.value =
-        parameters.BNS22.limestone[2].percentage.value;
-      this.BNS22.limestone[3].percentage.value =
-        parameters.BNS22.limestone[3].percentage.value;
-
-      this.SMA.general.thickness.value = parameters.SMA.general.thickness.value;
-      this.SMA.general.thickness.unit = parameters.SMA.general.thickness.unit;
-      this.SMA.general.width.value = parameters.SMA.general.width.value;
-      this.SMA.general.width.unit = parameters.SMA.general.width.unit;
-      this.SMA.general.bulkDensity.value =
-        parameters.SMA.general.bulkDensity.value;
-      this.SMA.general.bulkDensity.unit =
-        parameters.SMA.general.bulkDensity.unit;
-      this.SMA.bitumen.fraction.value = parameters.SMA.bitumen.fraction.value;
+    if (localDefaults) {
+      const parsed = JSON.parse(localDefaults);
+      this.update(parsed);
     }
+
     makeAutoObservable(this);
+  }
+
+  update(parameters: DefaultsType) {
+    this.type = parameters.type;
+    this.unit = parameters.unit;
+    this.Base = parameters.Base;
+    this.BNS32 = parameters.BNS32;
+    this.BNS22 = parameters.BNS22;
+    this.SMA = parameters.SMA;
+  }
+
+  updateLocalStorage() {
+    window.localStorage.setItem('defaults', JSON.stringify(this));
   }
 
   setType(type: 'length' | 'weight') {
@@ -354,7 +403,8 @@ class Calculation {
 
   updateCalculation() {
     this.createdAt = new Date();
-    this.parameters = new Defaults(defaults);
+    this.parameters = new Defaults();
+    this.parameters.update(deepCopy(defaults));
   }
 
   totalLength(layer: 'Base' | 'BNS32' | 'BNS22' | 'SMA') {
@@ -485,5 +535,6 @@ export const supabaseStore = new SupabaseStore(
   )
 );
 export const defaults = new Defaults();
+export const editDefaults = new Defaults();
 export const calculation = new Calculation();
 export const history = new History();

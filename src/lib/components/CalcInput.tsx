@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { DotsVerticalIcon } from '@radix-ui/react-icons';
+import { toast } from 'sonner';
 
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -10,9 +11,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { calculation, history } from '@/lib/stores';
-import { camelCaseToWords } from '../utils';
-import { toast } from 'sonner';
+import { camelCaseToWords } from '@/lib/utils';
+import { calculation, history, supabaseStore } from '@/lib/stores';
 
 const CalcInput = ({
   readOnly = false,
@@ -40,9 +40,10 @@ const CalcInput = ({
     }
   };
 
-  const calculateHandler = () => {
+  const calculateHandler = async () => {
     calculation.value = parseFloat(value || '0');
     history.addCalculation(calculation);
+    await supabaseStore.addCalculation(calculation);
     calculation.updateCalculation();
     onClick && onClick();
   };

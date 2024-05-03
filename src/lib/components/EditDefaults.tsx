@@ -1,5 +1,7 @@
-import { useState } from 'react';
-import { Cross1Icon } from '@radix-ui/react-icons';
+import { useEffect, useState } from 'react';
+import { observer } from 'mobx-react';
+import { Cross1Icon, SymbolIcon } from '@radix-ui/react-icons';
+import { toast } from 'sonner';
 
 import Parameter from '@/lib/components/Parameter';
 import {
@@ -9,15 +11,18 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
-import { defaults } from '@/lib/stores';
+import { Button } from '@/components/ui/button';
+import { deepCopy } from '@/lib/utils';
+import { editDefaults, defaults, supabaseStore } from '@/lib/stores';
 
-const EditDefaults = ({ onClose }: { onClose: () => void }) => {
+const EditDefaults = observer(({ onClose }: { onClose: () => void }) => {
   const [tab, setTab] = useState<'BNS32' | 'BNS22' | 'SMA' | 'Base'>('Base');
+  const [key, setKey] = useState<string>(+new Date() + '');
 
   const parameterChangeHandler = (value: number, parameters: any[]) => {
     if (parameters.length < 3) return;
     const [layer, group, parameter] = parameters;
-    defaults.setParameter(layer, group, parameter, value);
+    editDefaults.setParameter(layer, group, parameter, value);
   };
 
   const limestonePercentageChangeHandler = (
@@ -26,8 +31,26 @@ const EditDefaults = ({ onClose }: { onClose: () => void }) => {
   ) => {
     if (parameters.length < 2) return;
     const [layer, index] = parameters;
-    defaults.setLimestonePercentage(layer, index, value);
+    editDefaults.setLimestonePercentage(layer, index, value);
   };
+
+  const onSave = async () => {
+    defaults.update(deepCopy(editDefaults));
+    defaults.updateLocalStorage();
+    await supabaseStore.updateDefaults(editDefaults);
+    toast.success('Defaults updated successfully');
+    onClose();
+  };
+
+  const onSync = async () => {
+    await supabaseStore.fetchDefaults();
+    setKey(+new Date() + '');
+    toast.success('Defaults synced successfully');
+  };
+
+  useEffect(() => {
+    editDefaults.update(deepCopy(defaults));
+  }, []);
 
   return (
     <div className='bg-card rounded-lg'>
@@ -42,7 +65,7 @@ const EditDefaults = ({ onClose }: { onClose: () => void }) => {
           <div className='flex gap-3 overflow-auto no-scrollbar'>
             {['Base', 'BNS32', 'BNS22', 'SMA'].map((item) => (
               <Badge
-                key={`defaults-${item}`}
+                key={`${key}-defaults-${item}`}
                 onClick={() => setTab(item as any)}
                 variant={tab === item ? 'default' : 'secondary'}
                 className='cursor-pointer rounded-full'
@@ -71,7 +94,7 @@ const EditDefaults = ({ onClose }: { onClose: () => void }) => {
                           className={`sm:col-span-1 ${
                             index === 2 ? 'col-span-2' : ''
                           }`}
-                          key={`defaults-${tab}-general-${parameter}`}
+                          key={`${key}-defaults-${tab}-general-${parameter}`}
                         >
                           <Parameter
                             layer={tab}
@@ -94,7 +117,7 @@ const EditDefaults = ({ onClose }: { onClose: () => void }) => {
                 <AccordionTrigger>Bitumen</AccordionTrigger>
                 <AccordionContent>
                   <Parameter
-                    key={`defaults-${tab}-bitumen-fraction`}
+                    key={`${key}-defaults-${tab}-bitumen-fraction`}
                     layer={tab}
                     group='bitumen'
                     name='fraction'
@@ -119,17 +142,17 @@ const EditDefaults = ({ onClose }: { onClose: () => void }) => {
                       (item, index) => (
                         <div
                           className='grid grid-cols-2 gap-3 md:gap-4 lg:gap-5'
-                          key={`defaults-${tab}-limestone-${index}-div`}
+                          key={`${key}-defaults-${tab}-limestone-${index}-div`}
                         >
                           <Parameter
-                            key={`defaults-${tab}-limestone-${index}-thickness`}
+                            key={`${key}-defaults-${tab}-limestone-${index}-thickness`}
                             name='thickness'
                             value={item.thickness.value}
                             unit={item.thickness.unit}
                             disabled
                           />
                           <Parameter
-                            key={`defaults-${tab}-limestone-${index}-percentage`}
+                            key={`${key}-defaults-${tab}-limestone-${index}-percentage`}
                             layer={tab}
                             group='limestone'
                             name='percentage'
@@ -148,8 +171,28 @@ const EditDefaults = ({ onClose }: { onClose: () => void }) => {
           </Accordion>
         </div>
       </div>
+
+      <div className='p-3 sm:p-5 flex justify-end w-full'>
+        <div className='flex justify-between px-3 sm:px-0 w-full'>
+          <Button
+            onClick={onSync}
+            variant='ghost'
+            className='flex gap-2 items-center'
+          >
+            <SymbolIcon className='w-3 h-3' /> <span>Sync</span>
+          </Button>
+          <div className='flex gap-3'>
+            <Button onClick={onClose} variant='secondary'>
+              Cancel
+            </Button>
+            <Button onClick={onSave} className='font-semibold'>
+              Save
+            </Button>
+          </div>
+        </div>
+      </div>
     </div>
   );
-};
+});
 
 export default EditDefaults;

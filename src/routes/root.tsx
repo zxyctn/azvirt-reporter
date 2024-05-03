@@ -19,6 +19,12 @@ const Root = () => {
       data: { subscription },
     } = supabaseStore.client.auth.onAuthStateChange((_event, session) => {
       setSession(session);
+      if (session?.user) {
+        supabaseStore.user = session.user;
+        supabaseStore.fetchHistory();
+      } else {
+        supabaseStore.user = null;
+      }
     });
 
     return () => subscription.unsubscribe();
