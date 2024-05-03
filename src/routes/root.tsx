@@ -3,7 +3,7 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import type { Session } from '@supabase/supabase-js';
 
 import ThemeToggler from '@/lib/components/ThemeToggler';
-import { supabaseStore } from '@/lib/stores';
+import { history, supabaseStore } from '@/lib/stores';
 import { Toaster } from '@/components/ui/sonner';
 
 const Root = () => {
@@ -21,7 +21,9 @@ const Root = () => {
       setSession(session);
       if (session?.user) {
         supabaseStore.user = session.user;
-        supabaseStore.fetchHistory();
+        if (history.isFetched === false) {
+          supabaseStore.fetchHistory();
+        }
       } else {
         supabaseStore.user = null;
       }

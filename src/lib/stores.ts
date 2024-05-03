@@ -122,6 +122,8 @@ class SupabaseStore {
 
       history.addCalculation(calculation);
     });
+
+    history.isFetched = true;
   }
 
   async addCalculation(calculation: Calculation) {
@@ -511,6 +513,7 @@ class Calculation {
 }
 
 class History {
+  isFetched: boolean = false;
   calculations: CalculationType[] = [];
 
   constructor() {
