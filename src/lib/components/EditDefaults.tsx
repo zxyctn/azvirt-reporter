@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
-import { Cross1Icon, SymbolIcon } from '@radix-ui/react-icons';
+import {
+  Cross1Icon,
+  MixerHorizontalIcon,
+  SymbolIcon,
+} from '@radix-ui/react-icons';
 import { toast } from 'sonner';
 
 import Parameter from '@/lib/components/Parameter';
@@ -12,12 +16,14 @@ import {
 } from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { useMediaQuery } from '@/hooks/use-media-query';
 import { deepCopy } from '@/lib/utils';
 import { editDefaults, defaults, supabaseStore } from '@/lib/stores';
 
 const EditDefaults = observer(({ onClose }: { onClose: () => void }) => {
   const [tab, setTab] = useState<'BNS32' | 'BNS22' | 'SMA' | 'Base'>('Base');
   const [key, setKey] = useState<string>(+new Date() + '');
+  const isDesktop = useMediaQuery('(min-width: 768px)');
 
   const parameterChangeHandler = (value: number, parameters: any[]) => {
     if (parameters.length < 3) return;
@@ -54,14 +60,18 @@ const EditDefaults = observer(({ onClose }: { onClose: () => void }) => {
 
   return (
     <div className='bg-card rounded-lg'>
-      <div className='p-3 sm:p-5 flex items-center justify-between mb-3 sticky top-0 pb-1 sm:pb-1 sm:pt-3 rounded-t-lg'>
-        <div className='flex gap-2 items-center'>
+      <div className='p-3 sm:p-5 flex items-center justify-between mb-2 sticky top-0 pb-1 sm:pb-1 sm:pt-3 rounded-t-lg'>
+        <div className='px-3 sm:px-0 flex gap-2 items-center'>
+          <MixerHorizontalIcon className='w-3 h-3' />
           <span className='font-semibold pb-0.5'>Defaults</span>
         </div>
-        <Cross1Icon className='w-3 h-3 cursor-pointer' onClick={onClose} />
+        {isDesktop && (
+          <Cross1Icon className='w-3 h-3 cursor-pointer' onClick={onClose} />
+        )}
       </div>
+
       <div className='p-3 sm:p-5 pt-0 sm:pt-0  overflow-auto max-h-[500px]'>
-        <div className='p-3 sm:px-0'>
+        <div className='px-3 sm:px-0'>
           <div className='flex gap-3 overflow-auto no-scrollbar'>
             {['Base', 'BNS32', 'BNS22', 'SMA'].map((item) => (
               <Badge

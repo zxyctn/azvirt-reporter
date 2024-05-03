@@ -1,16 +1,21 @@
 import { Cross1Icon, TimerIcon } from '@radix-ui/react-icons';
 
+import { useMediaQuery } from '@/hooks/use-media-query';
 import { history } from '@/lib/stores';
 
 const History = ({ onClose }: { onClose: () => void }) => {
+  const isDesktop = useMediaQuery('(min-width: 768px)');
+
   return (
-    <div className='bg-secondary rounded-lg'>
-      <div className='p-3 sm:p-5 flex items-center justify-between mb-3 sticky top-0 bg-secondary pb-1 sm:pb-1 sm:pt-3 rounded-t-lg'>
+    <div className='bg-card rounded-lg'>
+      <div className='p-3 sm:p-5 flex items-center justify-between mb-3 sticky top-0 pb-1 sm:pb-1 sm:pt-3 rounded-t-lg'>
         <div className='flex gap-2 items-center'>
           <TimerIcon className='w-3 h-3' />{' '}
           <span className='font-semibold pb-0.5'>History</span>
         </div>
-        <Cross1Icon className='w-3 h-3 cursor-pointer' onClick={onClose} />
+        {isDesktop && (
+          <Cross1Icon className='w-3 h-3 cursor-pointer' onClick={onClose} />
+        )}
       </div>
       <div className='p-3 sm:p-5 pt-0 sm:pt-0  overflow-auto max-h-[500px]'>
         {[...history.calculations].reverse().map((calculation, index) => (

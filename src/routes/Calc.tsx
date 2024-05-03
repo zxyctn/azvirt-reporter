@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
 
 import CalcInput from '@/lib/components/CalcInput';
@@ -12,7 +12,9 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Drawer, DrawerContent } from '@/components/ui/drawer';
 import { Badge } from '@/components/ui/badge';
+import { useMediaQuery } from '@/hooks/use-media-query';
 import { calculation } from '@/lib/stores';
 
 const Calc = observer(() => {
@@ -20,6 +22,7 @@ const Calc = observer(() => {
   const [historyOpen, setHistoryOpen] = useState(false);
   const [editDefaultsOpen, setEditDefaultsOpen] = useState(false);
   const [tab, setTab] = useState<'BNS32' | 'BNS22' | 'SMA' | 'Base'>('Base');
+  const isDesktop = useMediaQuery('(min-width: 768px)');
 
   const parameterChangeHandler = (value: number, parameters: any[]) => {
     if (parameters.length < 3) return;
@@ -56,17 +59,33 @@ const Calc = observer(() => {
         </DialogContent>
       </Dialog>
 
-      <Dialog open={historyOpen} onOpenChange={setHistoryOpen}>
-        <DialogContent className='p-3 border-0 bg-transparent'>
-          <History onClose={() => setHistoryOpen(false)} />
-        </DialogContent>
-      </Dialog>
+      {isDesktop ? (
+        <Dialog open={historyOpen} onOpenChange={setHistoryOpen}>
+          <DialogContent className='p-3 border-0 bg-transparent'>
+            <History onClose={() => setHistoryOpen(false)} />
+          </DialogContent>
+        </Dialog>
+      ) : (
+        <Drawer open={historyOpen} onOpenChange={setHistoryOpen}>
+          <DrawerContent>
+            <History onClose={() => setHistoryOpen(false)} />
+          </DrawerContent>
+        </Drawer>
+      )}
 
-      <Dialog open={editDefaultsOpen} onOpenChange={setEditDefaultsOpen}>
-        <DialogContent className='p-3 border-0 bg-transparent'>
-          <EditDefaults onClose={() => setEditDefaultsOpen(false)} />
-        </DialogContent>
-      </Dialog>
+      {isDesktop ? (
+        <Dialog open={editDefaultsOpen} onOpenChange={setEditDefaultsOpen}>
+          <DialogContent className='p-3 border-0 bg-transparent'>
+            <EditDefaults onClose={() => setEditDefaultsOpen(false)} />
+          </DialogContent>
+        </Dialog>
+      ) : (
+        <Drawer open={editDefaultsOpen} onOpenChange={setEditDefaultsOpen}>
+          <DrawerContent>
+            <EditDefaults onClose={() => setEditDefaultsOpen(false)} />
+          </DrawerContent>
+        </Drawer>
+      )}
 
       <div className='p-3 sm:px-0'>
         <div className='flex gap-3 overflow-auto no-scrollbar'>
