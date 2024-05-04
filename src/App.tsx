@@ -23,7 +23,7 @@ const App = () => {
   ]);
 
   return (
-    <div className='w-screen h-screen sm:p-5 m-auto'>
+    <div className='w-screen h-screen'>
       <RouterProvider router={router} />
     </div>
   );

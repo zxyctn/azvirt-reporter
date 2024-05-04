@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import type { Session } from '@supabase/supabase-js';
 
-import ThemeToggler from '@/lib/components/ThemeToggler';
-import { history, supabaseStore } from '@/lib/stores';
+import Menu from '@/lib/components/Menu';
 import { Toaster } from '@/components/ui/sonner';
+import { history, page, supabaseStore } from '@/lib/stores';
 
 const Root = () => {
   const [session, setSession] = useState<Session | null>();
@@ -50,14 +50,24 @@ const Root = () => {
     }
   }, [session]);
 
+  useEffect(() => {
+    page.setCurrent(
+      location.pathname.split('/')[1] as 'calc' | 'reports' | 'layers' | ''
+    );
+  }, [location.pathname]);
+
   return (
     <div className='w-full h-full'>
       <Toaster />
-      <div className='absolute top-2 left-2'>
-        <ThemeToggler />
-      </div>
-      <div className='flex justify-center h-full'>
-        <Outlet />
+      {session && (
+        <div className='fixed lg:h-full w-full lg:w-max flex items-center bottom-0 lg:left-5 z-50'>
+          <Menu />
+        </div>
+      )}
+      <div className='flex justify-center h-full w-full'>
+        <div className='max-w-[800px] sm:p-5 m-auto h-full'>
+          <Outlet />
+        </div>
       </div>
     </div>
   );
