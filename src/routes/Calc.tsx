@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { observer } from 'mobx-react';
 
 import CalcInput from '@/lib/components/CalcInput';
@@ -40,7 +40,7 @@ const Calc = observer(() => {
   };
 
   return (
-    <div className='w-full max-w-[1000px]'>
+    <div className='w-full'>
       <div>
         <CalcInput
           onClick={() => setInputOpen(true)}
@@ -50,7 +50,7 @@ const Calc = observer(() => {
         />
       </div>
       <Dialog open={inputOpen} onOpenChange={setInputOpen}>
-        <DialogContent className='p-3 border-0 bg-transparent'>
+        <DialogContent className='p-0 border-0'>
           <CalcInput
             onClick={() => setInputOpen(!inputOpen)}
             onHistoryClick={() => setHistoryOpen(true)}
@@ -61,7 +61,7 @@ const Calc = observer(() => {
 
       {isDesktop ? (
         <Dialog open={historyOpen} onOpenChange={setHistoryOpen}>
-          <DialogContent className='p-3 border-0 bg-transparent'>
+          <DialogContent className='p-0'>
             <History onClose={() => setHistoryOpen(false)} />
           </DialogContent>
         </Dialog>
@@ -75,7 +75,7 @@ const Calc = observer(() => {
 
       {isDesktop ? (
         <Dialog open={editDefaultsOpen} onOpenChange={setEditDefaultsOpen}>
-          <DialogContent className='p-3 border-0 bg-transparent'>
+          <DialogContent className='p-0'>
             <EditDefaults onClose={() => setEditDefaultsOpen(false)} />
           </DialogContent>
         </Dialog>
