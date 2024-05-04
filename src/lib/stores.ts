@@ -530,6 +530,18 @@ class History {
   }
 }
 
+class Page {
+  current: 'calc' | 'reports' | 'layers' | '' = '';
+
+  constructor() {
+    makeAutoObservable(this);
+  }
+
+  setCurrent(current: 'calc' | 'reports' | 'layers' | '') {
+    this.current = current;
+  }
+}
+
 export const themeStore = new ThemeStore();
 export const supabaseStore = new SupabaseStore(
   createClient(
@@ -541,3 +553,4 @@ export const defaults = new Defaults();
 export const editDefaults = new Defaults();
 export const calculation = new Calculation();
 export const history = new History();
+export const page = new Page();
