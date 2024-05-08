@@ -36,7 +36,7 @@ const Menu = observer(() => {
                 size='icon'
                 className='p-0 rounded-full'
                 key={`menu-${index}`}
-                onClick={() => navigate(`/${route}`)}
+                onClick={() => navigate(`/${route}/`)}
                 disabled={route !== ''}
               >
                 {icon}

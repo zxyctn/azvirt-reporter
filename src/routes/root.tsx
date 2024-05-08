@@ -41,18 +41,21 @@ const Root = () => {
       route !== 'login' &&
       route !== 'forgot-password'
     ) {
-      navigate('/login');
+      navigate('/login/');
     } else if (
       session &&
       (route === 'login' || route === 'register' || route === 'forgot-password')
     ) {
       navigate('/');
     }
-  }, [session, location]);
+  }, [session]);
 
   useEffect(() => {
     page.setCurrent(
-      location.pathname.split('/')[1] as '' | 'reports' | 'layers'
+      location.pathname.split('/')[1] as
+        | ''
+        | 'reports'
+        | 'layers'
     );
   }, [location.pathname]);
 

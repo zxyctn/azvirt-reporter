@@ -5,23 +5,28 @@ import Calc from './routes/Calc';
 import Login from './routes/Login';
 
 const App = () => {
-  const router = createBrowserRouter([
+  const router = createBrowserRouter(
+    [
+      {
+        path: '',
+        element: <Root />,
+        errorElement: <div>Error</div>,
+        children: [
+          {
+            path: '',
+            element: <Calc />,
+          },
+          {
+            path: 'login',
+            element: <Login />,
+          },
+        ],
+      },
+    ],
     {
-      path: '',
-      element: <Root />,
-      errorElement: <div>Error</div>,
-      children: [
-        {
-          path: '',
-          element: <Calc />,
-        },
-        {
-          path: 'login',
-          element: <Login />,
-        },
-      ],
-    },
-  ]);
+      basename: '/azvirt-reporter/',
+    }
+  );
 
   return (
     <div className='w-screen h-screen'>

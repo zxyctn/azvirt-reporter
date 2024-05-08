@@ -8,6 +8,7 @@ dotenv.config();
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '/azvirt-reporter/',
   plugins: [
     react(),
     VitePWA({
