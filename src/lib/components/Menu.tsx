@@ -1,12 +1,13 @@
 import { observer } from 'mobx-react';
 import { useNavigate } from 'react-router-dom';
 import { FiPercent, FiFile, FiLayers, FiLogOut } from 'react-icons/fi';
+import { toast } from 'sonner';
+import type { ReactNode } from 'react';
 
 import ThemeToggler from '@/lib/components/ThemeToggler';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { page } from '@/lib/stores';
-import { ReactNode } from 'react';
+import { page, supabaseStore } from '@/lib/stores';
 
 const Menu = observer(() => {
   const navigate = useNavigate();
@@ -16,6 +17,17 @@ const Menu = observer(() => {
     { icon: <FiFile size={20} />, route: 'reports' },
     { icon: <FiLayers size={20} />, route: 'layers' },
   ];
+
+  const logOut = async () => {
+    const { error } = await supabaseStore.client.auth.signOut();
+
+    if (error) {
+      console.error('Error logging out:', error.message);
+      toast.error('Error logging out');
+    }
+
+    toast.success('Logged out');
+  };
 
   return (
     <div className='flex-col w-full bg-card lg:rounded-full justify-center lg:border'>
@@ -47,7 +59,7 @@ const Menu = observer(() => {
             variant='ghost'
             size='icon'
             className='p-0 rounded-full'
-            onClick={() => {}}
+            onClick={logOut}
           >
             <FiLogOut size={20} />
           </Button>
