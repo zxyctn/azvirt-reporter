@@ -18,7 +18,7 @@ const ThemeToggler = observer(() => {
           } Switched to ${themeStore.theme} mode`);
       }}
     >
-      {themeStore.theme === 'dark' ? <BiMoon /> : <BiSun />}
+      {themeStore.theme === 'dark' ? <BiMoon size={20} /> : <BiSun size={20} />}
     </Button>
   );
 });

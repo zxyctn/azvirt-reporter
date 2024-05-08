@@ -62,11 +62,11 @@ const EditDefaults = observer(({ onClose }: { onClose: () => void }) => {
     <div className='bg-card rounded-lg'>
       <div className='p-3 sm:p-5 flex items-center justify-between mb-2 sticky top-0 pb-1 sm:pb-1 sm:pt-3 rounded-t-lg'>
         <div className='px-3 sm:px-0 flex gap-2 items-center'>
-          <MixerHorizontalIcon className='w-3 h-3' />
-          <span className='font-semibold pb-0.5'>Defaults</span>
+          <MixerHorizontalIcon className='w-5 h-5' />
+          <span className='font-semibold pb-0.5 text-lg'>Defaults</span>
         </div>
         {isDesktop && (
-          <Cross1Icon className='w-3 h-3 cursor-pointer' onClick={onClose} />
+          <Cross1Icon className='w-5 h-5 cursor-pointer' onClick={onClose} />
         )}
       </div>
 

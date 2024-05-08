@@ -105,7 +105,7 @@ const CalcInput = ({
           <div className='w-6'></div>
         </div>
         {/* Input unit */}
-        <span className='absolute sm:bottom-14 right-4 sm:right-5 bottom-12 font-medium'>
+        <span className='absolute right-4 sm:right-5 bottom-20 font-medium'>
           {calculation.parameters.unit === 'm' ? 'Meters' : 'Tons'}
         </span>
         {/* Input */}
@@ -121,8 +121,8 @@ const CalcInput = ({
         />
       </div>
       {!readOnly && (
-        <Button className='w-full font-bold' onClick={calculateHandler}>
-          CALC
+        <Button className='w-full font-bold p-6' onClick={calculateHandler}>
+          <span className='text-lg'>CALC</span>
         </Button>
       )}
     </form>

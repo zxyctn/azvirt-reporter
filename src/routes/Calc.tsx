@@ -40,7 +40,7 @@ const Calc = observer(() => {
   };
 
   return (
-    <div className='w-full'>
+    <div className='w-full mb-10'>
       <div>
         <CalcInput
           onClick={() => setInputOpen(true)}

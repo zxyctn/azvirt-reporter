@@ -12,15 +12,15 @@ const Menu = observer(() => {
   const navigate = useNavigate();
 
   const icons: { icon: ReactNode; route: '' | 'reports' | 'layers' }[] = [
-    { icon: <FiPercent size={16} />, route: '' },
-    { icon: <FiFile size={16} />, route: 'reports' },
-    { icon: <FiLayers size={16} />, route: 'layers' },
+    { icon: <FiPercent size={20} />, route: '' },
+    { icon: <FiFile size={20} />, route: 'reports' },
+    { icon: <FiLayers size={20} />, route: 'layers' },
   ];
 
   return (
     <div className='flex-col w-full bg-card lg:rounded-full justify-center lg:border'>
       <Separator className='w-full lg:hidden' />
-      <div className='flex w-full justify-center p-2 lg:py-4'>
+      <div className='flex w-full justify-center p-3 lg:py-4'>
         <div className='flex w-full lg:flex-col items-center lg:justify-center justify-around max-w-[500px] gap-3'>
           {icons.map(({ icon, route }, index) => {
             return route === page.current ? (
@@ -49,7 +49,7 @@ const Menu = observer(() => {
             className='p-0 rounded-full'
             onClick={() => {}}
           >
-            <FiLogOut />
+            <FiLogOut size={20} />
           </Button>
           <ThemeToggler />
         </div>

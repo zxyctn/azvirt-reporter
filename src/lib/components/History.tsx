@@ -10,11 +10,11 @@ const History = ({ onClose }: { onClose: () => void }) => {
     <div className='bg-card rounded-lg'>
       <div className='p-3 sm:p-5 flex items-center justify-between mb-3 sticky top-0 pb-1 sm:pb-1 sm:pt-3 rounded-t-lg'>
         <div className='flex gap-2 items-center'>
-          <TimerIcon className='w-3 h-3' />{' '}
-          <span className='font-semibold pb-0.5'>History</span>
+          <TimerIcon className='w-5 h-5' />{' '}
+          <span className='font-semibold text-lg pb-0.5'>History</span>
         </div>
         {isDesktop && (
-          <Cross1Icon className='w-3 h-3 cursor-pointer' onClick={onClose} />
+          <Cross1Icon className='w-5 h-5 cursor-pointer' onClick={onClose} />
         )}
       </div>
       <div className='p-3 sm:p-5 pt-0 sm:pt-0  overflow-auto max-h-[500px]'>
