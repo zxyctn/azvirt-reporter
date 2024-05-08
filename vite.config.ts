@@ -18,9 +18,9 @@ export default defineConfig({
       },
       includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
       manifest: {
-        name: 'azvirt-reporter',
+        name: 'AzVirt Pavement App',
         short_name: 'azvirt-reporter',
-        description: 'azvirt-reporter',
+        description: 'AzVirt Pavement App',
         theme_color: '#ffffff',
         icons: [
           {
@@ -49,7 +49,7 @@ export default defineConfig({
         scope: '/azvirt-reporter/',
         start_url: '/azvirt-reporter/',
         display: 'standalone',
-        background_color: '#000000',
+        background_color: '#ffffff',
         orientation: 'portrait',
       },
     }),
