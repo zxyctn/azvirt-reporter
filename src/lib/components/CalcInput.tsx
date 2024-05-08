@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { camelCaseToWords } from '@/lib/utils';
-import { calculation, history, supabaseStore } from '@/lib/stores';
+import { appStore, calculation, history, supabaseStore } from '@/lib/stores';
 
 const CalcInput = ({
   readOnly = false,
@@ -43,7 +43,9 @@ const CalcInput = ({
   const calculateHandler = async () => {
     calculation.value = parseFloat(value || '0');
     history.addCalculation(calculation);
-    await supabaseStore.addCalculation(calculation);
+    if (!appStore.isGuest) {
+      await supabaseStore.addCalculation(calculation);
+    }
     calculation.updateCalculation();
     onClick && onClick();
   };

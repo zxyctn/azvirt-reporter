@@ -35,6 +35,7 @@ const Parameter = ({
       })
       .catch((err) => {
         toast.error('Could not copy text: ', err);
+        throw err;
       });
   };
 

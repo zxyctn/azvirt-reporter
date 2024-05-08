@@ -4,7 +4,7 @@ import type { Session } from '@supabase/supabase-js';
 
 import Menu from '@/lib/components/Menu';
 import { Toaster } from '@/components/ui/sonner';
-import { history, page, supabaseStore } from '@/lib/stores';
+import { appStore, history, page, supabaseStore } from '@/lib/stores';
 
 const Root = () => {
   const location = useLocation();
@@ -37,32 +37,27 @@ const Root = () => {
     const route = location.pathname.split('/')[1];
     if (
       session === null &&
+      appStore.isGuest === false &&
       route !== 'register' &&
       route !== 'login' &&
       route !== 'forgot-password'
     ) {
       navigate('/login/');
-    } else if (
-      session &&
-      (route === 'login' || route === 'register' || route === 'forgot-password')
-    ) {
+    } else if (session && route === 'login') {
       navigate('/');
     }
-  }, [session]);
+  }, [session, appStore.isGuest]);
 
   useEffect(() => {
     page.setCurrent(
-      location.pathname.split('/')[1] as
-        | ''
-        | 'reports'
-        | 'layers'
+      location.pathname.split('/')[1] as '' | 'reports' | 'layers' | 'login'
     );
   }, [location.pathname]);
 
   return (
     <div className='w-full h-full'>
       <Toaster />
-      {session && (
+      {(session || appStore.isGuest) && (
         <div className='fixed lg:h-full w-full lg:w-max flex items-center bottom-0 lg:left-5 z-50'>
           <Menu />
         </div>

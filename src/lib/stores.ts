@@ -19,8 +19,9 @@ import type {
   CalculationServer,
 } from '@/lib/types';
 
-class ThemeStore {
+class AppStore {
   theme: Theme = 'light';
+  isGuest: boolean = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -47,6 +48,10 @@ class ThemeStore {
     }
 
     root.classList.add(theme);
+  }
+
+  setGuest(value: boolean) {
+    this.isGuest = value;
   }
 }
 
@@ -327,7 +332,9 @@ class Defaults {
 
   constructor() {
     // check local storage for defaults
-    const localDefaults = window.localStorage.getItem('defaults');
+    const localDefaults = window.localStorage.getItem(
+      `defaults${appStore.isGuest ? '-guest' : ''}`
+    );
 
     if (localDefaults) {
       const parsed = JSON.parse(localDefaults);
@@ -347,7 +354,20 @@ class Defaults {
   }
 
   updateLocalStorage() {
-    window.localStorage.setItem('defaults', JSON.stringify(this));
+    window.localStorage.setItem(
+      `defaults${appStore.isGuest ? '-guest' : ''}`,
+      JSON.stringify(this)
+    );
+  }
+
+  fetchGuestDefaults() {
+    if (!appStore.isGuest) return;
+    const localDefaults = window.localStorage.getItem('defaults-guest');
+
+    if (localDefaults) {
+      const parsed = JSON.parse(localDefaults);
+      this.update(parsed);
+    }
   }
 
   setType(type: 'length' | 'weight') {
@@ -531,18 +551,18 @@ class History {
 }
 
 class Page {
-  current: 'calc' | 'reports' | 'layers' | '' = '';
+  current: 'login' | 'reports' | 'layers' | '' = '';
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  setCurrent(current: 'calc' | 'reports' | 'layers' | '') {
+  setCurrent(current: 'login' | 'reports' | 'layers' | '') {
     this.current = current;
   }
 }
 
-export const themeStore = new ThemeStore();
+export const appStore = new AppStore();
 export const supabaseStore = new SupabaseStore(
   createClient(
     `${import.meta.env.VITE_SUPABASE_URL}`,

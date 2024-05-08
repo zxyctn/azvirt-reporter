@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 import { BiSun, BiMoon } from 'react-icons/bi';
 
-import { themeStore } from '@/lib/stores';
+import { appStore } from '@/lib/stores';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 
@@ -12,13 +12,15 @@ const ThemeToggler = observer(() => {
       variant='ghost'
       className='rounded-full'
       onClick={() => {
-        themeStore.setTheme(themeStore.theme === 'dark' ? 'light' : 'dark');
-        toast(`${
-            themeStore.theme === 'dark' ? '🌙' : '☀️'
-          } Switched to ${themeStore.theme} mode`);
+        appStore.setTheme(appStore.theme === 'dark' ? 'light' : 'dark');
+        toast(
+          `${appStore.theme === 'dark' ? '🌙' : '☀️'} Switched to ${
+            appStore.theme
+          } mode`
+        );
       }}
     >
-      {themeStore.theme === 'dark' ? <BiMoon size={20} /> : <BiSun size={20} />}
+      {appStore.theme === 'dark' ? <BiMoon size={20} /> : <BiSun size={20} />}
     </Button>
   );
 });

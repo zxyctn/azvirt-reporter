@@ -18,7 +18,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { deepCopy } from '@/lib/utils';
-import { editDefaults, defaults, supabaseStore } from '@/lib/stores';
+import { editDefaults, defaults, supabaseStore, appStore } from '@/lib/stores';
 
 const EditDefaults = observer(({ onClose }: { onClose: () => void }) => {
   const [tab, setTab] = useState<'BNS32' | 'BNS22' | 'SMA' | 'Base'>('Base');
@@ -43,13 +43,17 @@ const EditDefaults = observer(({ onClose }: { onClose: () => void }) => {
   const onSave = async () => {
     defaults.update(deepCopy(editDefaults));
     defaults.updateLocalStorage();
-    await supabaseStore.updateDefaults(editDefaults);
+    if (!appStore.isGuest) {
+      await supabaseStore.updateDefaults(editDefaults);
+    }
     toast.success('Defaults updated successfully');
     onClose();
   };
 
   const onSync = async () => {
-    await supabaseStore.fetchDefaults();
+    if (!appStore.isGuest) {
+      await supabaseStore.fetchDefaults();
+    }
     setKey(+new Date() + '');
     toast.success('Defaults synced successfully');
   };
@@ -188,6 +192,7 @@ const EditDefaults = observer(({ onClose }: { onClose: () => void }) => {
             onClick={onSync}
             variant='ghost'
             className='flex gap-2 items-center'
+            disabled={appStore.isGuest}
           >
             <SymbolIcon className='w-3 h-3' /> <span>Sync</span>
           </Button>
