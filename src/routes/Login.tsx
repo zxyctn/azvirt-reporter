@@ -21,14 +21,14 @@ const Login = () => {
   const submitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const { error } = await supabaseStore.client.auth.signInWithPassword({
+    const res = await supabaseStore.client.auth.signInWithPassword({
       email: email,
       password: password,
     });
 
-    if (error) {
-      console.error(`Error logging in: ${error.message}`);
-      toast.error(`Error logging in: ${error.message}`);
+    if (res.error) {
+      console.error(`Error logging in: ${res.error.message}`);
+      toast.error(`Error logging in: ${res.error.message}`);
     } else {
       console.log('Logged in successfully');
       toast.success('Logged in successfully');
