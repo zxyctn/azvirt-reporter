@@ -51,8 +51,8 @@ const Login = () => {
   };
 
   return (
-    <div className='w-full h-full flex items-center'>
-      <div className='flex flex-col h-min gap-2 min-w-[250px]'>
+    <div className='w-full h-full grid items-center'>
+      <div className='grid h-min gap-2 min-w-[250px]'>
         <form
           onSubmit={submitHandler}
           className='grid gap-4 place-content-stretch h-full'
@@ -71,10 +71,10 @@ const Login = () => {
             Login
           </Button>
         </form>
-        <div className='flex flex-col w-full gap-2'>
-          <div className='flex w-full relative'>
+        <div className='grid w-full gap-2'>
+          <div className='w-full relative'>
             <Separator className='my-3' />
-            <span className='absolute uppercase text-xxs flex justify-center w-full'>
+            <span className='absolute uppercase text-xxs flex justify-center w-full top-0'>
               <span className='bg-card p-1 text-muted font-medium'>
                 Or continue with
               </span>
