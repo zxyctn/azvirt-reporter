@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import type { Session } from '@supabase/supabase-js';
 
 import Menu from '@/lib/components/Menu';
@@ -7,8 +7,9 @@ import { Toaster } from '@/components/ui/sonner';
 import { history, page, supabaseStore } from '@/lib/stores';
 
 const Root = () => {
-  const [session, setSession] = useState<Session | null>();
+  const location = useLocation();
   const navigate = useNavigate();
+  const [session, setSession] = useState<Session | null>();
 
   useEffect(() => {
     supabaseStore.client.auth.getSession().then(({ data: { session } }) => {
@@ -33,28 +34,25 @@ const Root = () => {
   }, []);
 
   useEffect(() => {
-    const route = location.pathname.split('/azvirt-reporter/')[1];
+    const route = location.pathname.split('/')[1];
     if (
       session === null &&
       route !== 'register' &&
       route !== 'login' &&
       route !== 'forgot-password'
     ) {
-      navigate('/azvirt-reporter/login');
+      navigate('/login');
     } else if (
       session &&
       (route === 'login' || route === 'register' || route === 'forgot-password')
     ) {
-      navigate('/azvirt-reporter/');
+      navigate('/');
     }
-  }, [session]);
+  }, [session, location]);
 
   useEffect(() => {
     page.setCurrent(
-      location.pathname.split('/azvirt-reporter/')[1] as
-        | ''
-        | 'reports'
-        | 'layers'
+      location.pathname.split('/')[1] as '' | 'reports' | 'layers'
     );
   }, [location.pathname]);
 

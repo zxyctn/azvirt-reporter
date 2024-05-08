@@ -1,14 +1,15 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createHashRouter, RouterProvider } from 'react-router-dom';
 
 import Root from './routes/root';
 import Calc from './routes/Calc';
 import Login from './routes/Login';
 
 const App = () => {
-  const router = createBrowserRouter([
+  const router = createHashRouter([
     {
-      path: '/azvirt-reporter/',
+      path: '/*',
       element: <Root />,
+      errorElement: <div>Error</div>,
       children: [
         {
           path: '',
