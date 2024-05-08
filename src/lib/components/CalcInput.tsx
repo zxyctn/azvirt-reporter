@@ -83,7 +83,7 @@ const CalcInput = ({
             </DropdownMenu>
           </div>
           {/* Input type menu */}
-          <div className=''>
+          <div className='mt-[-1.5px]'>
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <Badge className='cursor-pointer'>
