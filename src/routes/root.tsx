@@ -33,20 +33,19 @@ const Root = () => {
   }, []);
 
   useEffect(() => {
+    const route = location.pathname.split('/azvirt-reporter/')[1];
     if (
       session === null &&
-      location.pathname !== '/register' &&
-      location.pathname !== '/login' &&
-      location.pathname !== '/forgot-password'
+      route !== 'register' &&
+      route !== 'login' &&
+      route !== 'forgot-password'
     ) {
-      navigate('/login');
+      navigate('/azvirt-reporter/login');
     } else if (
       session &&
-      (location.pathname === '/login' ||
-        location.pathname === '/register' ||
-        location.pathname === '/forgot-password')
+      (route === 'login' || route === 'register' || route === 'forgot-password')
     ) {
-      navigate('/');
+      navigate('/azvirt-reporter/');
     }
   }, [session]);
 
