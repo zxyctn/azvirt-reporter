@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/azvirt-reporter/sw.js', { scope: '/azvirt-reporter/' })})}
