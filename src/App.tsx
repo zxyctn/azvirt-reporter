@@ -7,11 +7,11 @@ import Login from './routes/Login';
 const App = () => {
   const router = createBrowserRouter([
     {
-      path: '/',
+      path: '/azvirt-reporter/',
       element: <Root />,
       children: [
         {
-          path: 'calc',
+          path: '',
           element: <Calc />,
         },
         {

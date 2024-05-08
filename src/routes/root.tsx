@@ -52,7 +52,10 @@ const Root = () => {
 
   useEffect(() => {
     page.setCurrent(
-      location.pathname.split('/')[1] as 'calc' | 'reports' | 'layers' | ''
+      location.pathname.split('/azvirt-reporter/')[1] as
+        | ''
+        | 'reports'
+        | 'layers'
     );
   }, [location.pathname]);
 

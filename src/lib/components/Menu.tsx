@@ -11,8 +11,8 @@ import { ReactNode } from 'react';
 const Menu = observer(() => {
   const navigate = useNavigate();
 
-  const icons: { icon: ReactNode; route: 'calc' | 'reports' | 'layers' }[] = [
-    { icon: <FiPercent size={16} />, route: 'calc' },
+  const icons: { icon: ReactNode; route: '' | 'reports' | 'layers' }[] = [
+    { icon: <FiPercent size={16} />, route: '' },
     { icon: <FiFile size={16} />, route: 'reports' },
     { icon: <FiLayers size={16} />, route: 'layers' },
   ];
@@ -37,7 +37,7 @@ const Menu = observer(() => {
                 className='p-0 rounded-full'
                 key={`menu-${index}`}
                 onClick={() => navigate(`/${route}`)}
-                disabled={route !== 'calc'}
+                disabled={route !== ''}
               >
                 {icon}
               </Button>
