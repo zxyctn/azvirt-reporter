@@ -50,7 +50,7 @@ const Calc = observer(() => {
         />
       </div>
       <Dialog open={inputOpen} onOpenChange={setInputOpen}>
-        <DialogContent className='p-0 border-0'>
+        <DialogContent className='p-5 sm:p-0 bg-transparent border-0'>
           <CalcInput
             onClick={() => setInputOpen(!inputOpen)}
             onHistoryClick={() => setHistoryOpen(true)}
